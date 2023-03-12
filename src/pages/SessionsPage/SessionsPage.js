@@ -9,11 +9,7 @@ export default function SessionsPage() {
             <div>
 
                 <Sessions />
-
-                <Sessions />
-
-                <Sessions />
-
+                
             </div>
 
             <FooterContainer>
