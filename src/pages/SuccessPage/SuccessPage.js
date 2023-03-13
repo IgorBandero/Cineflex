@@ -1,10 +1,18 @@
 import styled from "styled-components"
+import { Link, useParams } from "react-router-dom";
+import React, { useContext } from 'react';
+import { GlobalContext } from "../../components/Context";
 
 export default function SuccessPage(props) {
 
-    /* {props.seatsList.map(seat => <p>Assento {seat.nameSeat}</p>
+        /* {props.seatsList.map(seat => <p>Assento {seat.nameSeat}</p>
 
                 )}*/
+    
+    const [globalState, setGlobalState] = useContext(GlobalContext);
+
+    console.log(globalState[4]);
+
 
     return (
         <PageContainer>
@@ -12,22 +20,24 @@ export default function SuccessPage(props) {
 
             <TextContainer>
                 <strong><p>Filme e sessão</p></strong>
-                <p>{props.nameMovie}</p>
-                <p>{props.date} - {props.hour}</p>
+                <p>{globalState[0].name}</p>
+                <p>{globalState[0].day} - {globalState[0].hour}</p>
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Ingressos</p></strong>
+                {globalState[4].map(seat => <p key={seat}> Assento {seat} </p>)}
                 
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Comprador</p></strong>
-                <p>Nome: {props.nameClient}</p>
-                <p>CPF: {props.cpfClient}</p>
+                <p>Nome: {globalState[2]}</p>
+                <p>CPF: {globalState[3]}</p>
             </TextContainer>
-
-            <button>Voltar para Home</button>
+            <Link to="/" > 
+                <button>Voltar para Home</button>
+            </Link>
         </PageContainer>
     )
 }

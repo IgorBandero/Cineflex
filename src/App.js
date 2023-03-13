@@ -6,21 +6,23 @@ import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import axios from 'axios';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { GlobalProvider } from "./components/Context";
 
 export default function App() {
 
        return (
-        <BrowserRouter>
-           <NavContainer>CINEFLEX</NavContainer>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/sessoes/:idMovie" element={<SessionsPage />} />
-                <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-                <Route path="/success" element={<SuccessPage nameMovie="AI" date="12/03/2023" hour="15:00" 
-                nameClient="Igor" cpfClient="756.345.123-34" />} />
-            </Routes>            
-        </BrowserRouter>
+        <GlobalProvider>
+            <BrowserRouter>
+            <NavContainer>CINEFLEX</NavContainer>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/sessoes/:idMovie" element={<SessionsPage />} />
+                    <Route path="/assentos/:idSessao" element={<SeatsPage />} />
+                    <Route path="/success" element={<SuccessPage/>} />
+                </Routes>            
+            </BrowserRouter>
+        </GlobalProvider>
+        
     )
 }
 

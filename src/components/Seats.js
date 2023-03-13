@@ -7,9 +7,11 @@ import axios from 'axios';
 export default function Seats(props) {
 
     const [selected, setSelected] = useState([]);
+    const [selectedNames, setSelectedNames] = useState([]);
     const [seatChosen, setSeatChosen] = useState(false);
 
     props.updateSeatsFunction(selected);
+    props.updateSeatsNames(selectedNames)
 
     function renderSeat(seat){
 
@@ -33,19 +35,23 @@ export default function Seats(props) {
         const index = selected.indexOf(seat.id);
         const array = selected;
         let newSelected;
+        let newSelectedName;
         if (selected.includes(seat.id)){
             array.splice(index, 1);
             setSelected(array); 
             setSeatChosen(false);
         }
         else if (seat.isAvailable){
-            if (selected === []){
+            if (selected === [] && selectedNames === []){
                 newSelected = [seat.id];
+                newSelectedName = [seat.name];
             }
             else {
                 newSelected = [...selected, seat.id];
+                newSelectedName = [...selectedNames, seat.name];
             }     
-            setSelected(newSelected);       
+            setSelected(newSelected);     
+            setSelectedNames(newSelectedName);  
             setSeatChosen(true);     
         }
         else {

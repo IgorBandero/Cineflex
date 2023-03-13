@@ -3,13 +3,17 @@ import Seats from "../../components/Seats"
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import React, { useContext } from 'react';
+import { GlobalContext } from "../../components/Context";
 
 export default function SeatsPage() {
 
     const [seatsList, setSeatsList] = useState(null);
+    const [seatsNameList, setSeatsNameList] = useState(null);
     const [movieSelected, setMovieSelected] = useState(null);
     const [nameClient, setNameClient] = useState("");
     const [cpfClient, setCpfClient] = useState("");
+    const [globalState, setGlobalState] = useContext(GlobalContext);
     let selectedSeats = [];
     let nameSelectedSeats = [];
    
@@ -38,7 +42,9 @@ export default function SeatsPage() {
         return <> </>
     }
 
-    function buySeats(selectedSeatsList, nameClient, cpfClient){
+    function buySeats(selectedSeatsList, nameSelectedSeats, nameClient, cpfClient){
+
+        setGlobalState([movieSelected, selectedSeatsList, nameClient, cpfClient, nameSelectedSeats]);
 
         for (let i=0; i<selectedSeats; i++){
             seatsList.map(function (seat) {
@@ -69,6 +75,10 @@ export default function SeatsPage() {
         selectedSeats = selectedSeatsList;
     }
 
+    function updateSeatsNames(selectedSeatsNamesList){
+        nameSelectedSeats = selectedSeatsNamesList;
+    }
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         if (name === "name") {
@@ -82,7 +92,7 @@ export default function SeatsPage() {
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <Seats list={seatsList} updateSeatsFunction={updateSeatsList} />
+            <Seats list={seatsList} updateSeatsFunction={updateSeatsList} updateSeatsNames={updateSeatsNames} />
 
             <CaptionContainer>
                 <CaptionItem>
@@ -106,8 +116,8 @@ export default function SeatsPage() {
                 CPF do Comprador:
                 <input name="cpf" placeholder="Digite seu CPF..." value={cpfClient} onChange={handleChange}/>
 
-                <Link to="/success" > 
-                    <button onClick={() => buySeats(selectedSeats, nameClient, cpfClient)} >Reservar Assento(s)</button>
+                <Link to="/success"> 
+                    <button onClick={() => buySeats(selectedSeats, nameSelectedSeats, nameClient, cpfClient)} >Reservar Assento(s)</button>
                 </Link>
             </FormContainer>
 
