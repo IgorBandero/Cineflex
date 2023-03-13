@@ -1,23 +1,52 @@
 import styled from "styled-components"
 import Sessions from "../../components/Sessions"
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 export default function SessionsPage() {
+
+    const [sessionsList, setSessionsList] = useState(null);
+    const [movieSelected, setMovieSelected] = useState(null);
+
+    const {idMovie} = useParams();
+    let movie = idMovie;
+    movie = movie.substring(1);
+
+    useEffect(() => {
+        const requestSessions = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${movie}/showtimes`);
+        
+        requestSessions.then(answer => {
+            setSessionsList(answer.data.days);
+            let movieObj = {name: answer.data.title, image: answer.data.posterURL}
+            setMovieSelected(movieObj);
+        });
+    
+        requestSessions.catch(errorRequest => {
+            console.log(errorRequest.response.data);
+        });
+            
+    }, []); 
+
+    if (sessionsList === null){
+        return <> </>
+    }
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
 
-                <Sessions />
+                <Sessions list={sessionsList} />
                 
             </div>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movieSelected.image} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{movieSelected.name}</p>
                 </div>
             </FooterContainer>
 

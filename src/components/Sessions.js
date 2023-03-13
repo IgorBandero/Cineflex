@@ -4,36 +4,14 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 
 
-export default function Sessions (){
+export default function Sessions (props){
 
     let assentos = "/assentos/:";
-    const [sessionsList, setSessionsList] = useState(null);
-    const {idMovie} = useParams();
-    let movie = idMovie;
-    movie = movie.substring(1);
-    let sessao = "/assentos/:";
- 
-    useEffect(() => {
-        const requestSessions = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${movie}/showtimes`);
-        
-        requestSessions.then(answer => {
-            setSessionsList(answer.data.days);
-        });
-    
-        requestSessions.catch(errorRequest => {
-            console.log(errorRequest.response.data);
-        });
-            
-    }, []); 
-
-    if (sessionsList === null){
-        return <> </>
-    }
 
     return (
 
         <>  
-            {sessionsList.map(item => 
+            {props.list.map(item => 
                                 <SessionContainer key={item.id}> 
                                     {item.weekday} - {item.date}    
                                     <ButtonsContainer>

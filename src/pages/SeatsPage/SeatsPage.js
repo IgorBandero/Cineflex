@@ -1,30 +1,56 @@
 import styled from "styled-components"
+import Seats from "../../components/Seats"
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 export default function SeatsPage() {
+
+    const [seatsList, setSeatsList] = useState(null);
+    const [movieSelected, setMovieSelected] = useState(null);
+    
+    const {idSessao} = useParams();
+    console.log(idSessao);
+    let session = idSessao;
+    session = session.substring(1);
+ 
+    useEffect(() => {
+        const requestSeats = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${session}/seats`);
+
+        requestSeats.then(answer => {
+            setSeatsList(answer.data.seats);
+            let movieObj = {name: answer.data.movie.title, image: answer.data.movie.posterURL, 
+            day: answer.data.day.weekday, hour: answer.data.name}
+            setMovieSelected(movieObj);
+        });
+    
+        requestSeats.catch(errorRequest => {
+            console.log(errorRequest.response.data);
+        });
+            
+    }, []); 
+
+    if (seatsList === null){
+        return <> </>
+    }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
-            </SeatsContainer>
+            <Seats list={seatsList} />
 
             <CaptionContainer>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#1AAE9E" border="1px solid #0E7D71"/>
                     Selecionado
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#C3CFD9" border="1px solid #7B8B99"/>
                     Disponível
                 </CaptionItem>
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color="#FBE192" border="1px solid #F7C52B"/>
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
@@ -41,11 +67,11 @@ export default function SeatsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movieSelected.image} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{movieSelected.name}</p>
+                    <p>{movieSelected.day} - {movieSelected.hour}</p>
                 </div>
             </FooterContainer>
 
@@ -65,15 +91,7 @@ const PageContainer = styled.div`
     padding-bottom: 120px;
     padding-top: 70px;
 `
-const SeatsContainer = styled.div`
-    width: 330px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-`
+
 const FormContainer = styled.div`
     width: calc(100vw - 40px); 
     display: flex;
@@ -96,8 +114,8 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    border: ${props => props.border};   // Essa cor deve mudar
+    background-color: ${props => props.color}; ;         // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -111,19 +129,6 @@ const CaptionItem = styled.div`
     flex-direction: column;
     align-items: center;
     font-size: 12px;
-`
-const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
-    font-family: 'Roboto';
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 3px;
 `
 const FooterContainer = styled.div`
     width: 100%;
