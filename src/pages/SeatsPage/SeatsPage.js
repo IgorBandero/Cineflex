@@ -3,17 +3,16 @@ import Seats from "../../components/Seats"
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import React, { useContext } from 'react';
-import { GlobalContext } from "../../components/Context";
+import { useNavigate } from "react-router-dom"
 
 export default function SeatsPage() {
 
+    const navigate = useNavigate();
     const [seatsList, setSeatsList] = useState(null);
     const [seatsNameList, setSeatsNameList] = useState(null);
     const [movieSelected, setMovieSelected] = useState(null);
     const [nameClient, setNameClient] = useState("");
     const [cpfClient, setCpfClient] = useState("");
-    const [globalState, setGlobalState] = useContext(GlobalContext);
     let selectedSeats = [];
     let nameSelectedSeats = [];
    
@@ -42,9 +41,9 @@ export default function SeatsPage() {
         return <> </>
     }
 
-    function buySeats(selectedSeatsList, nameSelectedSeats, nameClient, cpfClient){
+    function BuySeats(selectedSeatsList, nameSelectedSeats, nameClient, cpfClient){
 
-        setGlobalState([movieSelected, selectedSeatsList, nameClient, cpfClient, nameSelectedSeats]);
+        // setGlobalState([movieSelected, selectedSeatsList, nameClient, cpfClient, nameSelectedSeats]);
 
         for (let i=0; i<selectedSeats; i++){
             seatsList.map(function (seat) {
@@ -53,7 +52,6 @@ export default function SeatsPage() {
                             }
                           });
         }
-        console.log(nameSelectedSeats);
         let objRequest = {
                             ids: selectedSeatsList,
                             name: nameClient,
@@ -69,6 +67,10 @@ export default function SeatsPage() {
         requestPurchase.catch(errorRequest => {
             console.log(errorRequest.response.data);
         });
+
+        let dataPurchase = [movieSelected, selectedSeatsList, nameClient, cpfClient, nameSelectedSeats];
+
+        navigate("/success", {state: {data: dataPurchase}});
     }
 
     function updateSeatsList(selectedSeatsList){
@@ -111,17 +113,16 @@ export default function SeatsPage() {
 
             <FormContainer>
                 Nome do Comprador:
-                <input name="name" placeholder="Digite seu nome..." value={nameClient} onChange={handleChange}/>
+                <input data-test="client-name" name="name" placeholder="Digite seu nome..." value={nameClient} onChange={handleChange}/>
 
                 CPF do Comprador:
-                <input name="cpf" placeholder="Digite seu CPF..." value={cpfClient} onChange={handleChange}/>
+                <input data-test="client-cpf" name="cpf" placeholder="Digite seu CPF..." value={cpfClient} onChange={handleChange}/>
 
-                <Link to="/success"> 
-                    <button onClick={() => buySeats(selectedSeats, nameSelectedSeats, nameClient, cpfClient)} >Reservar Assento(s)</button>
-                </Link>
+                <button  data-test="book-seat-btn"  onClick={() => BuySeats(selectedSeats, nameSelectedSeats, nameClient, cpfClient)} >Reservar Assento(s)</button>
+
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={movieSelected.image} alt="poster" />
                 </div>

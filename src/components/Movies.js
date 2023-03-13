@@ -31,7 +31,7 @@ export default function Movies() {
         <ListContainer>
 
             {moviesList.map(item => 
-                <MovieContainer key={item.id}> 
+                <MovieContainer data-test="movie" key={item.id}> 
                     <Link to={sessao + item.id} ><img src={item.posterURL} alt="poster"/></Link>                    
                 </MovieContainer>)} 
 

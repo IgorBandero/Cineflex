@@ -1,41 +1,35 @@
 import styled from "styled-components"
 import { Link, useParams } from "react-router-dom";
-import React, { useContext } from 'react';
-import { GlobalContext } from "../../components/Context";
+import { useLocation } from 'react-router-dom';
 
 export default function SuccessPage(props) {
 
-        /* {props.seatsList.map(seat => <p>Assento {seat.nameSeat}</p>
-
-                )}*/
-    
-    const [globalState, setGlobalState] = useContext(GlobalContext);
-
-    console.log(globalState[4]);
-
+    const location = useLocation();
+    const informations = location.state.data;
+    console.log(informations);
 
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
-                <p>{globalState[0].name}</p>
-                <p>{globalState[0].day} - {globalState[0].hour}</p>
+                <p>{informations[0].name}</p>
+                <p>{informations[0].day} - {informations[0].hour}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                {globalState[4].map(seat => <p key={seat}> Assento {seat} </p>)}
+                {informations[4].map(seat => <p key={seat}> Assento {seat} </p>)}
                 
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
-                <p>Nome: {globalState[2]}</p>
-                <p>CPF: {globalState[3]}</p>
+                <p>Nome: {informations[2]}</p>
+                <p>CPF: {informations[3]}</p>
             </TextContainer>
-            <Link to="/" > 
+            <Link data-test="go-home-btn" to="/" > 
                 <button>Voltar para Home</button>
             </Link>
         </PageContainer>

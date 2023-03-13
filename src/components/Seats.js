@@ -22,7 +22,7 @@ export default function Seats(props) {
             arrumaChosen(chosen);
         } 
         let estilo = getStyleSeat(seat, chosen);
-        return (<SeatItem key={seat.id} style={estilo} onClick={() => selectSeat(seat)} >{seat.name}</SeatItem>);
+        return (<SeatItem data-test="seat" key={seat.id} style={estilo} onClick={() => selectSeat(seat)} >{seat.name}</SeatItem>);
     }
 
     function arrumaChosen(chosen){

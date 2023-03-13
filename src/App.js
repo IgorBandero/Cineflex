@@ -6,12 +6,10 @@ import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import axios from 'axios';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { GlobalProvider } from "./components/Context";
 
 export default function App() {
 
        return (
-        <GlobalProvider>
             <BrowserRouter>
             <NavContainer>CINEFLEX</NavContainer>
                 <Routes>
@@ -20,9 +18,7 @@ export default function App() {
                     <Route path="/assentos/:idSessao" element={<SeatsPage />} />
                     <Route path="/success" element={<SuccessPage/>} />
                 </Routes>            
-            </BrowserRouter>
-        </GlobalProvider>
-        
+            </BrowserRouter>       
     )
 }
 

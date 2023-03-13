@@ -12,11 +12,11 @@ export default function Sessions (props){
 
         <>  
             {props.list.map(item => 
-                                <SessionContainer key={item.id}> 
+                                <SessionContainer data-test="movie-day" key={item.id}> 
                                     {item.weekday} - {item.date}    
                                     <ButtonsContainer>
                                         {item.showtimes.map(sessionTime => 
-                                        <Link to={assentos + sessionTime.id} key={sessionTime.id}>
+                                        <Link data-test="showtime" to={assentos + sessionTime.id} key={sessionTime.id}>
                                             <button> 
                                                 {sessionTime.name}
                                             </button>
