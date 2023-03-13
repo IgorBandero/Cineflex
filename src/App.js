@@ -17,7 +17,8 @@ export default function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/sessoes/:idMovie" element={<SessionsPage />} />
                 <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-                <Route path="/success" element={<SuccessPage />} />
+                <Route path="/success" element={<SuccessPage nameMovie="AI" date="12/03/2023" hour="15:00" 
+                nameClient="Igor" cpfClient="756.345.123-34" />} />
             </Routes>            
         </BrowserRouter>
     )

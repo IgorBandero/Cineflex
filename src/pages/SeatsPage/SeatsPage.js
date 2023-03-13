@@ -8,9 +8,13 @@ export default function SeatsPage() {
 
     const [seatsList, setSeatsList] = useState(null);
     const [movieSelected, setMovieSelected] = useState(null);
+    const [nameClient, setNameClient] = useState("");
+    const [cpfClient, setCpfClient] = useState("");
+    let selectedSeats = [];
+    let nameSelectedSeats = [];
+   
     
     const {idSessao} = useParams();
-    console.log(idSessao);
     let session = idSessao;
     session = session.substring(1);
  
@@ -34,11 +38,51 @@ export default function SeatsPage() {
         return <> </>
     }
 
+    function buySeats(selectedSeatsList, nameClient, cpfClient){
+
+        for (let i=0; i<selectedSeats; i++){
+            seatsList.map(function (seat) {
+                            if (selectedSeatsList.includes(seat.id)){
+                                nameSelectedSeats.push(seat.name);
+                            }
+                          });
+        }
+        console.log(nameSelectedSeats);
+        let objRequest = {
+                            ids: selectedSeatsList,
+                            name: nameClient,
+                            cpf: cpfClient
+                         }
+
+        const requestPurchase = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", objRequest);
+        
+        requestPurchase.then(answer => {
+            // console.log(answer);
+        });
+    
+        requestPurchase.catch(errorRequest => {
+            console.log(errorRequest.response.data);
+        });
+    }
+
+    function updateSeatsList(selectedSeatsList){
+        selectedSeats = selectedSeatsList;
+    }
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        if (name === "name") {
+            setNameClient(value);
+        } else if (name === "cpf") {
+            setCpfClient(value);
+        }
+    }
+
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
-            <Seats list={seatsList} />
+            <Seats list={seatsList} updateSeatsFunction={updateSeatsList} />
 
             <CaptionContainer>
                 <CaptionItem>
@@ -57,12 +101,14 @@ export default function SeatsPage() {
 
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input name="name" placeholder="Digite seu nome..." value={nameClient} onChange={handleChange}/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input name="cpf" placeholder="Digite seu CPF..." value={cpfClient} onChange={handleChange}/>
 
-                <button>Reservar Assento(s)</button>
+                <Link to="/success" > 
+                    <button onClick={() => buySeats(selectedSeats, nameClient, cpfClient)} >Reservar Assento(s)</button>
+                </Link>
             </FormContainer>
 
             <FooterContainer>
@@ -99,8 +145,12 @@ const FormContainer = styled.div`
     align-items: flex-start;
     margin: 20px 0;
     font-size: 18px;
+    a {
+        text-decoration: none;
+    }
     button {
         align-self: center;
+        cursor: pointer;
     }
     input {
         width: calc(100vw - 60px);
