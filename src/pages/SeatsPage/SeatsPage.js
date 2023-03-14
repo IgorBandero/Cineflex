@@ -69,6 +69,7 @@ export default function SeatsPage() {
         });
 
         let dataPurchase = [movieSelected, selectedSeatsList, nameClient, cpfClient, nameSelectedSeats];
+        console.log(nameSelectedSeats);
 
         navigate("/success", {state: {data: dataPurchase}});
     }

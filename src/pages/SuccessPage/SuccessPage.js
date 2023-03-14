@@ -6,7 +6,9 @@ export default function SuccessPage(props) {
 
     const location = useLocation();
     const informations = location.state.data;
-    console.log(informations);
+    const seatsList = informations[4].filter((value, index) => {
+        return informations[4].indexOf(value) === index;
+    });
 
     return (
         <PageContainer>
@@ -20,7 +22,7 @@ export default function SuccessPage(props) {
 
             <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                {informations[4].map(seat => <p key={seat}> Assento {seat} </p>)}
+                {seatsList.map((seat, index) => <p key={index}> Assento {seat} </p>)}
                 
             </TextContainer>
 

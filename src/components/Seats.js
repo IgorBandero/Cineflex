@@ -45,6 +45,8 @@ export default function Seats(props) {
             if (selected === [] && selectedNames === []){
                 newSelected = [seat.id];
                 newSelectedName = [seat.name];
+                console.log(newSelected);
+                console.log(newSelectedName);
             }
             else {
                 newSelected = [...selected, seat.id];
